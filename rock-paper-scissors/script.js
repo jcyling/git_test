@@ -1,5 +1,32 @@
 // Odin's Rock Paper Scissors
 
+let userWins = 0;
+let compWins = 0;
+
+const roundMessage = document.querySelector('.roundMessage');
+const gameMessage = document.querySelector('.gameMessage');
+const userScore = document.querySelector('.userScore');
+const compScore = document.querySelector('.compScore');
+
+const reset = document.querySelector('.reset');
+reset.addEventListener('click', () => {
+   location.reload();
+});
+
+const buttons = document.querySelectorAll('.choices');
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+       userPlay = button.value;
+       console.log(userPlay);
+       playRound(computerPlay(), userPlay);
+    });
+});
+
+// Check if userScore or compScore has changed
+
+compScore.textContent = compWins;
+userScore.textContent = userWins;
+
 function computerPlay() {
     let select =  Math.floor(Math.random() * 3)
 
@@ -16,22 +43,10 @@ function computerPlay() {
     }
 }
 
-function userPlay() {
-    let choice = ""; 
-    let validChoice = ["rock", "paper", "scissors"]
-    while (!validChoice.some(v => choice.includes(v))) {
-        choice = prompt("Rock, paper, scissors? Go!").toLowerCase();
-    }
-    return choice;
-}
-
-function playRound() {
-    let choiceComp = computerPlay();
-    let choiceUser = userPlay();
+function playRound(choiceComp, choiceUser) {
 
     if (choiceComp == choiceUser) {
-        document.querySelector(".message").innerHTML = "Tie.";
-        console.log("Tie.");
+        messageTie();
         return "tie";
     }
     else if (choiceComp == "rock")
@@ -40,40 +55,44 @@ function playRound() {
         return (choiceUser == "scissors") ? messageWin(choiceComp, choiceUser): messageLose(choiceComp, choiceUser);
     else if (choiceComp == "scissors")
         return (choiceUser == "rock") ? messageWin(choiceComp, choiceUser): messageLose(choiceComp, choiceUser);
-    
-}
 
-function game() {
-    let compWins = 0;
-    let userWins = 0;
-    for (i = 0; i < 5; i++) {
-        result = playRound();
-        if (result == "win") {
-            userWins += 1 
-        }
-        else if (result == "lose"){
-            compWins += 1
-        }
-        console.log(i);
-    }
-    
-    if (userWins > compWins) {
-        console.log("Nice one! You're the overall winner!")
-    } 
-    else {
-        console.log("The computer won... as it should. PCMASTERRACE")
-    }
 }
 
 function messageWin (choiceComp, choiceUser) {
-    document.querySelector(".message").innerHTML = `You Win. ${ choiceUser } beats ${ choiceComp }!`;
-    console.log(`You Win. ${ choiceUser } beats ${ choiceComp }!`);
+    document.querySelector(".roundMessage").textContent = `You Win. ${ choiceUser } beats ${ choiceComp }!`;
+    userWins += 1;
+    userScore.textContent = userWins;
+    if (userWins == 5) {
+        gameWon()
+    }
     return "win";
 }
 
 function messageLose (choiceComp, choiceUser) {
-    document.querySelector(".message").innerHTML = `You Lose. ${ choiceComp } beats ${ choiceUser }!`;
-    console.log(`You Lose. ${ choiceComp } beats ${ choiceUser }!`)
+    document.querySelector(".roundMessage").textContent = `You Lose. ${ choiceComp } beats ${ choiceUser }!`;
+    compWins += 1;
+    compScore.textContent = compWins;
+    if (compWins == 5) {
+        gameLost()
+    }
     return "lose";
 }
 
+function messageTie () {
+    document.querySelector(".roundMessage").textContent = `It's a tie.`;
+    return "tie";
+}
+
+function gameWon() {
+    document.querySelector(".roundMessage").textContent = `Nice one. You won!`;
+    buttons.forEach((button) => {
+        button.disabled = true;
+    });
+}
+
+function gameLost() {
+    document.querySelector(".gameMessage").textContent = `Bad luck. Try again.`;
+    buttons.forEach((button) => {
+        button.disabled = true;
+    });
+}

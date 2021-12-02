@@ -3,11 +3,23 @@
 <head>
   <title>Page Title</title>
   <meta charset="UTF-8"/>
-  <script type = "text/javascript" src="/script.js"></script> 
+  <link rel="stylesheet" href="style.css">
+  <script type = "text/javascript" src="/script.js" defer></script>
 </head>
 <body>
+  <div class="container">
+    <div class="header">Rock Paper Scissors</div>
+    <div class="row">
+      <button class="choices rock" value="rock">Rock</button>
+      <button class="choices paper" value="paper">Paper</button>
+      <button class="choices scissors" value="scissors">Scissors</button>
+    </div>
+    <div class="roundMessage"></div>
+    <div>Your Score: <span class="userScore">0</span></div>
+    <div>Computer Score: <span class="compScore">0</span></div>
 
-  <p class="message"></p>
-
+    <div class="gameMessage"></div>
+    <button class="reset">F5</button>
+  </div>
 </body>
 </html>
