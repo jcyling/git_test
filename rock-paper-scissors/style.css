@@ -63,6 +63,14 @@ div > p {
     text-align: center;
     padding: 0;
     background-color: transparent;
-    border: 3px solid black;
+    border: 3px solid #FF6700;
+    font-weight: 400;
+    font-family: inherit;
+    font-size: 1.5em;
+    color: #FF6700;
+    margin: 30px;
+}
 
+.reset:active {
+  transform: translateY(4px);
 }
