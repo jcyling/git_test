@@ -1,7 +1,68 @@
+html, body {
+   margin: 0;
+   padding: 0;
+   height: 100vh;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #f7f7f7;
+   font-family: 'VT323', monospace, 'courier new';
+}
+
 .container {
+    margin: 0 auto;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 40vh;
+    justify-content: center;
+
+}
+
+.header {
+    font-size: 3em;
+    padding: 1em;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.choices {
+    margin: 0 auto;
+    font-size: 10em;
+    background-color: transparent;
+    border: none;
+    transition: all .05s ease;
+}
+
+.active {
+  transform: translateY(4px);
+}
+
+div > p {
+    font-size: 2em;
+    text-align: center;
+}
+
+.message {
+    height: 1.2em;
+    font-size: 2em;
+    text-align: center;
+}
+
+.score {
+    font-size: 2em;
+}
+
+.reset {
+    visibility: hidden;
+    height: 2em;
+    width: 2.5em;
+    text-align: center;
+    padding: 0;
+    background-color: transparent;
+    border: 3px solid black;
 
 }

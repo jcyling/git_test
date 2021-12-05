@@ -16,11 +16,19 @@ reset.addEventListener('click', () => {
 const buttons = document.querySelectorAll('.choices');
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
+       button.classList.add('active');
        userPlay = button.value;
-       console.log(userPlay);
        playRound(computerPlay(), userPlay);
     });
 });
+
+
+// Remove transition
+buttons.forEach(button => button.addEventListener('transitionend', removeTransition));
+
+function removeTransition(e) {
+  this.classList.remove('active');
+}
 
 // Check if userScore or compScore has changed
 
@@ -58,6 +66,8 @@ function playRound(choiceComp, choiceUser) {
 
 }
 
+// Messages
+
 function messageWin (choiceComp, choiceUser) {
     document.querySelector(".roundMessage").textContent = `You Win. ${ choiceUser } beats ${ choiceComp }!`;
     userWins += 1;
@@ -84,15 +94,19 @@ function messageTie () {
 }
 
 function gameWon() {
-    document.querySelector(".roundMessage").textContent = `Nice one. You won!`;
+    document.querySelector(".gameMessage").textContent = `Nice one. You won! Refresh to play again.`;
     buttons.forEach((button) => {
         button.disabled = true;
     });
+    reset.style.visibility = "visible";
 }
 
 function gameLost() {
-    document.querySelector(".gameMessage").textContent = `Bad luck. Try again.`;
+    document.querySelector(".gameMessage").textContent = `Bad luck. Refresh to play again.`;
     buttons.forEach((button) => {
         button.disabled = true;
     });
+    reset.style.visibility = "visible";
+
 }
+
