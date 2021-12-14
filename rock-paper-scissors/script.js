@@ -22,7 +22,6 @@ buttons.forEach((button) => {
     });
 });
 
-
 // Remove transition
 buttons.forEach(button => button.addEventListener('transitionend', removeTransition));
 
