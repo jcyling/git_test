@@ -1,14 +1,15 @@
 let slider = document.getElementById('gridsize');
 let size = slider.defaultValue;
+let colorInput = document.getElementById('color');
 
 let mode = 0;
-let color = '#ff4017';
 
 const frame = document.querySelector('.frame');
 const reset = document.querySelector('.reset');
 
 makegrid();
 
+// Events
 
 //Grid slider
 slider.addEventListener('click', () => {
@@ -16,15 +17,15 @@ slider.addEventListener('click', () => {
     makegrid();
 })
 
-//Colour picker
-colorInput = document.getElementById('color');
-
-colorInput.addEventListener('click', () => {
-    color = colorInput.value;
-})
-
+// Clean function
 reset.addEventListener('click', clean)
 
+// Colour picker mode change
+colorInput.addEventListener('click', () => {
+    mode = 0;
+})
+
+// Hover listener
 frame.onmouseover = function(event) {
     let target = event.target.closest('div');
     if (mode == 1) {
@@ -51,6 +52,7 @@ function setrandom() {
 }
 
 function draw(a) {
+    color = colorInput.value;
     a.style.backgroundColor = color;
 }
 
