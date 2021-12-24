@@ -3,16 +3,20 @@
   <title>Page Title</title>
   <meta charset="UTF-8"/>
   <link rel="stylesheet" href="style.css">
-  <script type = "text/javascript" src="/script.js" defer></script>
-</head>
+  <script type = "text/javascript" src="script.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Karla:wght@300&display=swap" rel="stylesheet"> </head>
 <body>
+
+  <h1>Etch-A-Sketch</h1>
   <div class="frame">
 
   </div>
   <div class="controls">
     <button class="reset" onclick="reset()">Reset</button>
-    <button class="normal" onclick="set()">Normal</button>
     <input type="color" value="#ff4017" id="color">
+    <button class="normal" onclick="set()">Normal</button>
     <button class="random" onclick="setrandom()">Random</button>
     <input type="range" min="10" max=60 value="10" step="10" class="slider" id="gridsize">
     <p id="size"></p>
