@@ -1,0 +1,46 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+frame {
+    margin: auto;
+    padding: 10px;
+    border: 1px solid grey;
+    height:inherit;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.5em;
+    flex-wrap: nowrap;
+}
+
+.display {
+    height: 50px;
+    background-color: rgb(228, 228, 228);
+    margin-bottom: 0.5em;
+    padding: 10px;
+    font-size: 20px;
+    line-height: 50px;
+    text-align: right;
+    vertical-align: middle;
+    color: black;
+    overflow: hidden;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5em;
+    flex-wrap: nowrap;
+}
+
+button {
+    height: 50px;
+    width: 50px;
+    font-size: 18px;
+}
