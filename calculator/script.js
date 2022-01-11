@@ -1,51 +1,147 @@
 let display = document.querySelector('.display');
 let currentValue = '';
-let a = 0;
-let b = 0;
+let a = null;
+let b = null;
 let o = '';
+let result = null;
 
-// Digits listener
 const digits = document.querySelectorAll('.digit');
+const operators = document.querySelectorAll('.operator');
+const equal = document.querySelector('.equal');
+const clearBtn = document.querySelector('.clear');
+const posneg = document.querySelector('.posneg');
+const delBtn = document.querySelector('.delete');
+
 digits.forEach((digit) => {
-    digit.addEventListener('click', () => {
-        let value = digit.textContent;
+    digit.addEventListener('click', () => record(digit.textContent));
+})
+operators.forEach((operator) => {
+    operator.addEventListener('click', () => recordOperator(operator));
+})
+clearBtn.addEventListener('click', clear);
+delBtn.addEventListener('click', backspace);
+equal.addEventListener('click', evaluate);
+posneg.addEventListener('click', positiveNegative);
+
+// Bugs
+// Delete button
+// Plus and minus
+// Keys listener
+// Big num
+// Refactor
+
+function record(value) {
+    if (result == null) {
         currentValue += value;
         display.textContent = currentValue;
-    })
-})
-
-// Operantor listener 
-const operators = document.querySelectorAll('.operator');
-operators.forEach((operator) => {
-    operator.addEventListener('click', () => {
-        let classes = operator.classList;
-        operatorSwitch(classes);
-        a = parseInt(currentValue);
+    }
+    // On press when result is already on screen
+    else {
         currentValue = '';
-    })
-})
+        display.textContent = '';
+        result = null;
+        currentValue += value;
+        display.textContent = currentValue;
+    }
+}
+
+// Operator listener 
+function recordOperator(operator) {
+        // On new expression or old result
+        if (a == null || a == currentValue) {
+            let classes = operator.classList;
+            operatorSwitch(classes);
+            a = (Number.isInteger(currentValue)) ? parseInt(currentValue) : parseFloat(currentValue);
+            currentValue = '';
+        }
+        else {
+            // Make calculation
+            b = (Number.isInteger(currentValue)) ? parseInt(currentValue) : parseFloat(currentValue);
+            result = evaluate(a, b, o);
+            if (result == null) {
+                return;
+            }
+            else {
+                a = result;
+                display.textContent = result;
+                currentValue = '';
+    
+                // Record new operator
+                let classes = operator.classList;
+                operatorSwitch(classes);                    
+            }
+        }
+}
 
 // Equal listener
-const equal = document.querySelector('.equal');
-equal.addEventListener('click', () => {
-    display.textContent = ''
-    b = parseInt(currentValue);
-    let result = operate(a, b, o);
-    display.textContent = result;
+function evaluate() {
+    b = (Number.isInteger(currentValue)) ? parseInt(currentValue) : parseFloat(currentValue);
 
-    a = parseInt(result);
-    b = 0;
-    currentValue = result;
-})
+    // Check all vars present and equation not already worked out
+    if (a == null || b == null || o == null || a == result) {
+        console.log("Caught a null")
+        return;
+    }
+    // Check for NaN
+    else if (a != a || b != b) {
+        console.log("Caught a NaN")
+        return;
+    }
+    else {
+        result = operate(a, b, o);
+        
+        // If result is a float
+        if (!Number.isInteger(result)) {
+            result = roundFloat(result)
+        }
+        
+        // Record result as A
+        a = (Number.isInteger(result)) ? parseInt(result) : parseFloat(result);
+        console.log(result);
+        display.textContent = ''
+        currentValue = result;
+        display.textContent = result;
+        b = null;
+    }
+}
 
-// Clear listener
-const clear = document.querySelector('.clear');
-clear.addEventListener('click', () => {
+function clear() {
     display.textContent = '';
-    a = 0;
-    b = 0;
+    a = null;
+    b = null;
+    result = null;
     currentValue = '';
-})
+}
+
+function backspace() {
+    // remove last character from current value
+    // update display
+}
+
+function positiveNegative() {
+    // if larger than 0, multiply by negative 1
+    // if smaller than 0, multiply by negative 1 to get positive
+}
+
+function roundFloat(result) {
+    let resultString = result.toString();
+    let resultLength = resultString.length;
+
+    // If result doesn't fit the screen
+    if (resultLength >= 15) {
+        let index = resultString.indexOf('.');
+        let decLength = resultLength - index;
+        decLength = 15 - index; 
+        floatResult = result.toFixed(decLength);
+        return floatResult;
+    }
+    else {
+        let index = resultString.indexOf('.');
+        let decLength = resultLength - index;
+        floatResult = result.toFixed(decLength);
+        return floatResult;
+    }
+}
 
 function operatorSwitch(classes) {
     switch(true) {
@@ -61,14 +157,24 @@ function operatorSwitch(classes) {
 }
 
 function operate(a, b, o) {
-    let operator = o;
-    console.log(a, o, b)
-    switch(operator) {
-        case '+': return add(a, b);
-        case '-': return subtract(a, b);
-        case '*': return multiply(a, b);
-        case '/': return divide(a, b);
+    // Check
+    if (a == null || b == null || o == null) {
+        console.log('Caught a nulls')
+        return;
     }
+    else {
+        console.log('operating')
+        let operator = o;
+    
+        console.log(a, o, b)
+        switch(operator) {
+            case '+': return add(a, b);
+            case '-': return subtract(a, b);
+            case '*': return multiply(a, b);
+            case '/': return divide(a, b);
+        }
+    }
+
 }
 
 function add(a, b) {
