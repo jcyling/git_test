@@ -24,22 +24,19 @@ equal.addEventListener('click', evaluate);
 posneg.addEventListener('click', positiveNegative);
 
 // Bugs
-// Delete button
-// Plus and minus
 // Keys listener
-// Big num
+// Double operator = NaN
 // Refactor
 
 function record(value) {
-    if (result == null) {
+    // Where expression has been calculated
+    if (result != null) {
+        currentValue = '';
         currentValue += value;
         display.textContent = currentValue;
-    }
-    // On press when result is already on screen
-    else {
-        currentValue = '';
-        display.textContent = '';
         result = null;
+    }
+    else {
         currentValue += value;
         display.textContent = currentValue;
     }
@@ -48,28 +45,19 @@ function record(value) {
 // Operator listener 
 function recordOperator(operator) {
         // On new expression or old result
-        if (a == null || a == currentValue) {
-            let classes = operator.classList;
-            operatorSwitch(classes);
+        if (a == null || result == currentValue) {
+            operatorSwitch(operator);
             a = (Number.isInteger(currentValue)) ? parseInt(currentValue) : parseFloat(currentValue);
             currentValue = '';
         }
         else {
             // Make calculation
             b = (Number.isInteger(currentValue)) ? parseInt(currentValue) : parseFloat(currentValue);
-            result = evaluate(a, b, o);
-            if (result == null) {
-                return;
-            }
-            else {
-                a = result;
-                display.textContent = result;
-                currentValue = '';
-    
-                // Record new operator
-                let classes = operator.classList;
-                operatorSwitch(classes);                    
-            }
+            result = operate(a, b, o);
+            display.textContent = result;
+            currentValue = result;
+            operatorSwitch(operator); 
+            a = result;                   
         }
 }
 
@@ -94,6 +82,10 @@ function evaluate() {
         if (!Number.isInteger(result)) {
             result = roundFloat(result)
         }
+        // If result is too long
+        if (result.toString().length >= 15) {
+            result = bigNum(result)
+        }
         
         // Record result as A
         a = (Number.isInteger(result)) ? parseInt(result) : parseFloat(result);
@@ -114,13 +106,27 @@ function clear() {
 }
 
 function backspace() {
-    // remove last character from current value
-    // update display
+    if (currentValue != result) {
+        currentValue = currentValue.substring(0, currentValue.length -1);
+        display.textContent = currentValue;
+    }
+    else {
+        return;
+    }
 }
 
 function positiveNegative() {
-    // if larger than 0, multiply by negative 1
-    // if smaller than 0, multiply by negative 1 to get positive
+    currentValue *= (-1);
+    display.textContent = currentValue;
+    if (a = currentValue) {
+        a *= (-1);
+    }
+}
+
+function bigNum(num) {
+    num = num.toExponential(5);
+    return num;
+
 }
 
 function roundFloat(result) {
@@ -143,7 +149,8 @@ function roundFloat(result) {
     }
 }
 
-function operatorSwitch(classes) {
+function operatorSwitch(operator) {
+    let classes = operator.classList;
     switch(true) {
         case classes.contains('add'): o = '+';
             break;
@@ -159,13 +166,11 @@ function operatorSwitch(classes) {
 function operate(a, b, o) {
     // Check
     if (a == null || b == null || o == null) {
-        console.log('Caught a nulls')
+        console.log('Caught a null')
         return;
     }
     else {
-        console.log('operating')
         let operator = o;
-    
         console.log(a, o, b)
         switch(operator) {
             case '+': return add(a, b);

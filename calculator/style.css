@@ -39,6 +39,7 @@ body {
     text-align: right;
     vertical-align: middle;
     color: black;
+    max-width: inherit;
     overflow: hidden;
 }
 
