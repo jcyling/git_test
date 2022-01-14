@@ -24,10 +24,6 @@ equal.addEventListener('click', evaluate);
 posneg.addEventListener('click', positiveNegative);
 window.addEventListener('keydown', keyboardInput);
 
-// Bugs
-// Fix enlarging display if more numbers are input
-// Refactor
-
 function record(value) {
     // Where expression has been calculated
     if (result != null) {
