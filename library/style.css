@@ -1,3 +1,26 @@
 body {
     font-family: 'Karla';
 }
+
+.gallery {
+    display: flex;
+}
+
+.film {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 20%;
+    background: rgb(170,255,181);
+    background: linear-gradient(0deg, rgba(170,255,181,1) 0%, rgba(172,210,255,1) 100%);
+    border-radius: 3em;
+    padding: 1em;
+    margin: 1em;
+}
+
+button {
+    width: 7em;
+    height: 2em;
+    margin: 0.5em;
+}
