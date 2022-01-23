@@ -1,9 +1,35 @@
+/**Main**/
+
 body {
-    font-family: 'Karla';
+    font: 300 16px/22px "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.navbar {
+    width: 100vw;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding-left: 0.5em;
+}
+
+h3 {
+    font-size: 2em;
+    white-space: nowrap;
+    margin: 5%;
+}
+
+h4 {
+    font-size: 1em;
+    text-transform: uppercase;
+    margin: 0 0 5% 0;
 }
 
 .gallery {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .film {
@@ -11,16 +37,51 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 20%;
-    background: rgb(170,255,181);
-    background: linear-gradient(0deg, rgba(170,255,181,1) 0%, rgba(172,210,255,1) 100%);
-    border-radius: 3em;
-    padding: 1em;
+    align-content: space-between;
+    min-width: 200px;
+    flex-grow: 0;
+    padding: 2em;
     margin: 1em;
+    background: rgb(255, 255, 255);
+    background: linear-gradient(20deg, rgb(250, 206, 255) 0%, rgb(240, 253, 183)100%);
+    border-radius: 1.5em;
+    box-shadow: 6px 6px 16px rgba(197, 197, 197, 0.8);
+}
+
+.userControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 button {
-    width: 7em;
-    height: 2em;
+    display: inline;
     margin: 0.5em;
+    border-radius: 30px;
+    background-color: rgb(247, 247, 247);
+    color: rgb(94, 94, 94);
+    border: 0;
+    padding: 0.5em 1em 0.5em 1em;
+}
+
+.add {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 50px;
+    width: 7em;
+    height: 7em;
+    background-color: rgb(66, 166, 248);
+    color: white;
+    border: 0;
+    box-shadow: 6px 6px 16px rgba(197, 197, 197, 0.8);
+
+}
+
+.add:active {
+    transform: translateY(3px);
+}
+
+.watchState {
+    width: 8em;
 }

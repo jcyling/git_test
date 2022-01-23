@@ -33,11 +33,16 @@ myLibrary.push(StandByMe2);
 // Add film to library
 function addFilmToLibrary() {
     let title = prompt("Title");
-    let director = prompt("director");
+    let director = prompt("Director");
     let genre = prompt("Genre");
     let watched = prompt("Watched");
 
-    const newFilm = new Film(title, director, genre, watched);
+    if (!title || !director || !genre || !watched) {
+        return window.alert("Check again!");
+    }
+    else {
+        const newFilm = new Film(title, director, genre, watched);
+    }
 
     myLibrary.push(newFilm);
 }
@@ -49,6 +54,8 @@ function displayFilms() {
         let title = document.createElement("h3");
         let director = document.createElement("h4");
         let genre = document.createElement("h4");
+
+        let userControls = document.createElement("div");
         let rmvBtn = document.createElement("button");
         let watchBtn = document.createElement("button");
 
@@ -58,6 +65,7 @@ function displayFilms() {
         watchBtn.textContent = watchedOrNot(myLibrary[i].watched);
         rmvBtn.textContent = "Remove";
 
+        userControls.classList.add("userControls");
         watchBtn.classList.add("watchState");
         watchBtn.setAttribute("value", i);
 
@@ -65,7 +73,9 @@ function displayFilms() {
         rmvBtn.setAttribute("value", i);
 
         card.classList.add("film");
-        card.append(title, director, genre, rmvBtn, watchBtn);
+        card.setAttribute("id", i);
+        userControls.append(rmvBtn, watchBtn);
+        card.append(title, director, genre, userControls);
         gallery.appendChild(card);
     }
 }
@@ -73,15 +83,16 @@ function displayFilms() {
 function changeStatus(button) {
     let index = button.value;
     let status = myLibrary[index].watched;
-    console.log(status);
 
     if (status) {
+        console.log('hello');
         status = false;
     }
     else {
         status = true;
     }
-    console.log(status);
+
+    myLibrary[index].watched = status;
     button.textContent = watchedOrNot(status);
 }
 
@@ -93,7 +104,7 @@ function removeFilm(button) {
     console.log('hello');
     let index = button.value;
     myLibrary.splice(index, 1);
-    let parentCard = button.parentElement;
+    let parentCard = document.getElementById(index);
     gallery.removeChild(parentCard);
 }
 
