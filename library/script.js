@@ -1,12 +1,12 @@
-let myLibrary = [];
-
 // Static Selectors
 const gallery = document.querySelector(".gallery");
 const addBtn = document.querySelector(".add");
 const submit = document.querySelector(".submit");
-const formData = document.getElementById("filmForm");
+const closeBtn = document.querySelector(".closeBtn");
+
 addBtn.addEventListener("click", displayForm);
-submit.addEventListener("click", submitFilm(formData));
+submit.addEventListener("click", getInput);
+closeBtn.addEventListener("click", closeForm);
 
 gallery.onclick = function(event) {
     let target = event.target.closest('button');
@@ -41,29 +41,23 @@ Film.prototype.info = function() {
     return `${this.title} by ${this.director}, ${this.genre} pages, ${this.watched}.`
 }
 
-function submitFilm(formData) {
-    const titleField = formData.elements["title"];
-    const directorField = formData.elements["director"];
-    const title = titleField.value;
-    const director = directorField.value;
-    let genre;
-
-    const genreSelects = document.querySelectorAll(`select[name="genre"]`);
-    for (const genreSelect of genreSelects) {
-        if(genreSelect.checked) {
-            genre = genreSelect.value;
-            console.log("genre");
-            break;
-        }
+function getInput() {
+    let forma = document.forms.filmForm;
+    let formData = new FormData(forma);
+    let t = formData.get("title"); 
+    let d = formData.get("director"); 
+    let g = formData.get("genre"); 
+    let w = watchStatusInput(formData.get("watched")); 
+    
+    for (var value of formData.values()) {
+        console.log(value);
     }
 
-    // const watched = prompt("Watched");
-
-    if (!title || !director || !genre || !watched) {
+    if (!t || !d || !g) {
         return window.alert("Check again!");
     }
     else {
-        const newFilm = new Film(title, director, genre, watched);
+        const newFilm = new Film(t, d, g, w);
         myLibrary.push(newFilm);
         let i = myLibrary.length;
         let newCard = createFilm(newFilm, i);
@@ -80,11 +74,11 @@ function displayFilms() {
 }
 
 function createFilm(film, i) {
+    // Create HTML elements
     const card = document.createElement("div");
     const title = document.createElement("h3");
     const director = document.createElement("h4");
     const genre = document.createElement("h4");
-
     const userControls = document.createElement("div");
     const rmvBtn = document.createElement("button");
     const watchBtn = document.createElement("button");
@@ -125,6 +119,10 @@ function changeStatus(button) {
     button.textContent = watchedOrNot(status);
 }
 
+function watchStatusInput(value) {
+    return (value == "True") ? true : false;
+}
+
 function watchedOrNot(value) {
     return (value) ? "Watched" : "Not watched";
 }
@@ -137,34 +135,41 @@ function removeFilm(button) {
     gallery.removeChild(parentCard);
 }
 
-// Form functions
+// Form visibility functions
 function displayForm() {
-    const visibilityForm = document.querySelector(".formContainer");
-    visibilityForm.style.visibility = "visible";
+    const form = document.querySelector(".formContainer");
+    form.style.display = "flex";
 }
+
+function closeForm() {
+    const form = document.querySelector(".formContainer");
+    form.style.display = "none";
+}
+
 
 // Existing entries
 const theHobbit = new Film ("The Hobbit", "Peter Jackson", "Fantasy", true);
 const StandByMe2 = new Film ("Stand By Me 2", "Takashi Yamazaki", "Fantasy", false);
 
-// Initial display
-myLibrary = loadStorage();
-displayFilms();
-
 // Local storage
 function loadStorage() {
-    const library = JSON.parse(localStorage.getItem("myLibrary"));
-    if (library) {
-        console.log('Been here before');
-        return library;
+    const currentLibrary = JSON.parse(localStorage.getItem("myLibrary"));
+    if (currentLibrary) {
+        return currentLibrary;
     }
     else {
         console.log('Hi new person!');
         myLibrary.push(theHobbit);
         myLibrary.push(StandByMe2);
+        return myLibrary;
     }
 }
 
 function saveStorage() {
     localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
 }
+
+// Main
+let myLibrary = [];
+myLibrary = loadStorage();
+displayFilms();
