@@ -1,14 +1,41 @@
 const main = document.querySelector(".main");
 
+// Player factory
+const playerType = (name, mark, pc) => {
+    return {name, mark, pc};
+};
+
+
+// Create players
+const player1 = playerType("Player One", "X", false);
+const player2 = playerType("Player Two", "O", true);
+let gameStatus = "none";
+let currentPlayer = player1;
+
 // Gameboard module
 const gameboard = (function() {
     const board = document.querySelector(".board");
     const cells = document.querySelectorAll(".cell");
-
-    let boardArray = ["X", "", "", "O", "X", "", "X" ,"O", "X"];
+    let boardArray = ["", "", "", "", "", "", "" ,"", ""];
 
     // Winning combo
-    let winArray = [];
+    let winArray = [
+        [1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1],
+        [1, 0, 0, 1, 0, 0, 1, 0, 0],
+        [0, 1, 0, 0, 1, 0, 0, 1, 0],
+        [0, 0, 1, 0, 0, 1, 0, 0, 1],
+        [1, 0, 0, 0, 1, 0, 0, 0, 1],
+        [0, 0, 1, 0, 1, 0, 1, 0, 0]
+    ];
+
+    // Check win
+    function checkWin() {
+
+        
+    }
+
 
     // Cell listener
     function cellListener() {
@@ -28,12 +55,25 @@ const gameboard = (function() {
     function updateCells(cell) {
         const i = cell.getAttribute("data-value");
         const mark = boardArray[i];
+        let player = currentPlayer;
 
         // If empty, make it the player's mark
         if (!mark) {
-            boardArray[i] = player1.mark;
+            boardArray[i] = player.mark;
         }
+        gameController.swapPlayer();
         showCellStatus();
+        if (checkWin) {
+            gameFin();
+        };
+    }
+    
+    // Reset array
+    function reset() {
+        for (let i = 0; i < cells.length; i++) {
+            boardArray[i] = null;
+            cells[i].textContent = null;
+        }
     }
     
     // Game over function
@@ -46,31 +86,61 @@ const gameboard = (function() {
         showCellStatus,
         updateCells,
         gameOver,
+        reset,
+        checkWin,
     }
 })();
 
 // Display module
-const displayController = (() => {
+const gameController = (function() {
+
+    const reset = document.querySelector(".reset");
+    const message = document.queryCommandIndeterm(".message");
+
+    // Game finish
+    function gameFin() {
+        message.textContent = "Done!";
+    }
+
+    // Turn displayer
+    function turnDisplay() {
+        const turn = document.querySelector(".turnPlayer")
+        turn.textContent = currentPlayer.name;
+    }
+
+    // Reset listener
+    function resetListener() {
+        reset.addEventListener("click", (event) => {
+            gameboard.reset();
+        })
+    }
+
+    // Swap players
+    function swapPlayer() {
+        if (currentPlayer == player1) {
+            currentPlayer = player2;
+        }
+        else {
+            currentPlayer = player1;
+        }
+        return currentPlayer;
+    }
 
     // Initialization
     function init() {
         gameboard.showCellStatus();
         gameboard.cellListener();
+        gameController.resetListener();
+        gameController.turnDisplay();
     }
 
     return {
         init,
+        resetListener,
+        swapPlayer,
+        turnDisplay,
     }
 })();
 
-// Player factory
-const playerType = (name, turn, mark) => {
-    return {name, turn, mark};
-};
-
-// Create players
-const player1 = playerType("Player One", 0, "X", false);
-const player2 = playerType("Player Two", 0, "O", true);
-
 // Main initialization
-displayController.init();
+gameController.init();

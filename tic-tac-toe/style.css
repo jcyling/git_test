@@ -1,6 +1,6 @@
 html {
     box-sizing: border-box;
-    font-family: 'Lucida Sans', sans-serif;
+    font-family: 'Arial', sans-serif;
     font-size: 20px;
 }
 
@@ -10,7 +10,7 @@ h1 {
 
 .board {
     margin: auto;
-    margin-top: 15%;
+    margin-top: 100px;
     display: flex;
     flex-wrap: wrap;
     width: 600px;
@@ -28,4 +28,15 @@ h1 {
     padding: 0;
     margin: 0;
     overflow: hidden;
+}
+
+.reset {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10%;
+    padding: .8rem;
+}
+
+.info {
+    text-align: center;
 }
