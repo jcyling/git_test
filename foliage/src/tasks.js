@@ -1,15 +1,19 @@
+import { isDate, isPast } from 'date-fns/isDate';
+import { appe } from './index.js';
+import { saveStorage } from './storage.js';
+
 class Tree {
     constructor(name) {
         this.name = name;
         this.branches = []; 
     }
-
 }
 
 class Branch {
-    constructor(name) {
+    constructor(name, status) {
         this.name = name;
         this.leaves = [];
+        this.active = status;
     }
 
     get branchName() {
@@ -20,14 +24,17 @@ class Branch {
         this.name = value;
     }
 
+    get branchStatus() {
+        return this.active;
+    }
+
 }
 
 class Leaf {
-    constructor(name, stat, date, priority) {
+    constructor(name, stat, date) {
         this.name = name;
         this.stat = stat;
         this.date = date;
-        this.priority = priority;
     }
 
     get leafName() {
@@ -51,15 +58,12 @@ class Leaf {
     }
 
     set leafDate(value) {
-        this.date = value;
-    }
-
-    get leafPriority() {
-        return this.priority;
-    }
-
-    set leafPriority(value) {
-        this.priority = value;
+        if (!isDate(value) || isPast(value)) {
+            return console.log("Error");
+        }
+        else {
+            this.date = value;
+        }
     }
 }
 
@@ -67,12 +71,12 @@ class Leaf {
 const createDefaultProject = (function() {
     function createDefault() {
         const defaultTree = new Tree("The Tree");
-        const dailies = new Branch("Dailies");
-        const weeklies = new Branch("Weeklies");
+        const dailies = new Branch("Dailies", true);
+        const weeklies = new Branch("Weeklies", false);
 
-        const getMilk = new Leaf("Get milk", false, "", 1);
-        const getBread = new Leaf("Get bread", false, "", 1);
-        const makePlaylist = new Leaf("Make playlist", false, "", 2);
+        const getMilk = new Leaf("Get milk", false, "");
+        const getBread = new Leaf("Get bread", false, "");
+        const makePlaylist = new Leaf("Make playlist", false, "");
 
         defaultTree.branches.push(dailies, weeklies);
         dailies.leaves.push(getMilk, getBread, makePlaylist);
@@ -87,11 +91,18 @@ const createDefaultProject = (function() {
 
 const addToProject = (function() {
     function createBranch(name) {
-        let newLeaf = new Leaf(name.value);
+        let newBranch = new Branch(name.value);
     }
 
-    function createLeaf(name) {
-        let newBranch = new Branch(name.value);
+    function createLeaf(name, date) {
+        let newLeaf = new Leaf(name, false);
+        if (date) {
+            newLeaf.date = date;
+        }
+        let currentBranch = appe.branches.find(branch => branch.active == true);
+        currentBranch.leaves.push(newLeaf);
+        console.log(appe);
+        saveStorage(appe);
     }
     return {
         createBranch,
@@ -99,8 +110,8 @@ const addToProject = (function() {
     }
 })();
 
-
 export {
+
     createDefaultProject,
     addToProject
 }

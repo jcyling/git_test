@@ -1,21 +1,17 @@
-import { loadStorage } from "./storage.js";
 import { renderState } from "./render.js";
 import { listeners } from "./events.js";
+import { loadStorage } from "./storage.js";
 import './style.css';
+
+let appe = [];
 
 
 const loadPage = (function() {
-
     function init() {
-        const tree = loadStorage();
-        renderState.renderTree(tree);
-        renderState.renderMenu();
-        listeners.addBtns();
-        // Save storage
-        // Begin event listeners
-
+        appe = loadStorage();
+        renderState.renderTree(appe);
+        listeners.events();
     }
-
     return {
         init
     }
@@ -23,3 +19,7 @@ const loadPage = (function() {
 
 // Initialization
 loadPage.init();
+
+export {
+    appe
+}

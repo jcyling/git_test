@@ -1,8 +1,3 @@
-
-
-
-
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -28,7 +23,6 @@ main {
     h2 {
         @apply text-xl py-2 px-4;
     }
-
 }
 
 @layer components {
@@ -36,7 +30,7 @@ main {
         @apply flex flex-col basis-1/4 bg-gray-200;
     }
     .dashboard {
-        @apply flex flex-col basis-3/4 bg-blue-100;
+        @apply flex flex-col basis-3/4 bg-white;
     }
     .branch {
         @apply flex flex-col bg-gray-200 py-2 px-4 hover:bg-gray-100;
@@ -44,21 +38,36 @@ main {
     .leaf {
         @apply flex flex-row py-2 px-4 bg-blue-500 text-white shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
     }
+    .branch-form  {
+        @apply flex flex-row px-3 py-2;
+    }
+    .branch-form-name {
+        @apply appearance-none bg-gray-100 border w-full border-blue-500 text-gray-700 mr-1 py-1 px-2 leading-tight rounded;
+    }
+    .branch-form-submit {
+        @apply bg-transparent hover:bg-blue-500 text-xs text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded;
+    }
+    .leaf-form {
+        @apply flex py-2 px-2;
+    }
+    .leaf-form-date, .leaf-form-name {
+        @apply appearance-none bg-gray-100 border w-full text-gray-700 mr-3 py-1 px-2 leading-tight rounded;
+    }
+    .leaf-form-submit {
+        @apply bg-transparent hover:bg-blue-500 text-xs text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded;    }
     .add-branch {
-        @apply py-2 px-4 bg-blue-400 text-white shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+        @apply py-2 px-4 bg-gray-100 text-gray-400 shadow-md hover:bg-gray-500 focus:outline-none focus:ring-2  focus:ring-opacity-75;
     }
     .add-leaf {
-        @apply py-2 px-4 bg-blue-400 text-white shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+        @apply py-2 px-4 bg-white text-gray-400 shadow-md hover:bg-gray-500 focus:outline-none focus:ring-2  focus:ring-opacity-75;
     }
 
 }
 
-.leaf-form-name {
-    @apply bg-white;
+.hidden {
+    display: none;
 }
+
 .leaf-name {
     @apply grow;
-}
-.leaf-priority {
-    @apply px-2 py-0 rounded text-right text-black bg-amber-400;
 }

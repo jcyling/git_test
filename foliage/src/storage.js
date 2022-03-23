@@ -6,18 +6,14 @@ function loadStorage() {
         return appState;
     }
     else {
-        const tree = createDefaultProject.createDefault()
-        return tree;
-        
+        return createDefaultProject.createDefault();
     }
 }
+function saveStorage(tree) {
+    window.localStorage.setItem("appState", JSON.stringify(tree));
+    console.log("storage" + tree);
 
-
-function saveStorage() {
-    // localStorage.setItem("activeTasks", JSON.stringify(//activeTasks
-    // ));
 }
-
 
 export {
     loadStorage,

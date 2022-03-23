@@ -1,23 +1,22 @@
+import { appe } from "./index.js"
 import { createElemWithClass } from "./helpers.js"
 
 // get stuff from storage
 const renderState = (function() {
-    const main = document.querySelector("main");
     const dashboard = document.querySelector(".dashboard");
     const branchNav = document.querySelector(".nav-branch");
-
+    const branchForm = document.querySelector(".branch-form");
+    const leafForm = document.querySelector(".leaf-form");
 
     function renderTree(tree) {
-        const treeName = createElemWithClass("h2", "tree-name", tree.name);
-        branchNav.appendChild(treeName);
-        
+        // Refresh tree
+        document.querySelectorAll(".branch").forEach(n => n.remove());
+        document.querySelectorAll(".leaf").forEach(n => n.remove());
+
         // Iterate through branches
         tree.branches.forEach(function(item, index) {
-            branchNav.appendChild(renderBranch(item, index));
+            branchNav.insertBefore(renderBranch(item, index), branchForm);
         });
-
-
-        main.appendChild(dashboard);
     }
 
     function renderBranch(item, index) {
@@ -35,7 +34,7 @@ const renderState = (function() {
 
         // Iterate through leaves
         item.leaves.forEach(function(item, index) {
-            dashboard.appendChild(renderLeaves(item, index));
+            dashboard.insertBefore(renderLeaves(item, index), leafForm);
         });
 
         return branch;
@@ -53,29 +52,18 @@ const renderState = (function() {
         return leaf;
     }
 
-    function renderMenu() {
-        const addLeaf = createElemWithClass("button", "add-leaf", "Add Leaf");
-        dashboard.appendChild(addLeaf);
-
-        const addBranch = createElemWithClass("button", "add-branch", "New Branch");
-        branchNav.appendChild(addBranch);
-
-        
-        const leafForm = createElemWithClass("div", ".leaf-form");
-        const leafNameInput = createElemWithClass("input", ".leaf-form-name", "Name", "type", "text");
-        const leafFormSubmit = createElemWithClass("button", ".leaf-form-submit", "Submit");
-        const leafDateInput = createElemWithClass("input", ".leaf-form-date", "Date")
-        leafForm.appendChild(leafNameInput);
-        leafForm.appendChild(leafDateInput);
-        leafForm.appendChild(leafFormSubmit);
-        dashboard.insertBefore(leafForm, dashboard.lastChild);    
-    
+    function showLeafForm() {
+        leafForm.classList.toggle("hidden");
     }
 
+    function showBranchForm() {
+        branchForm.classList.toggle("hidden");
 
+    }
     return {
         renderTree,
-        renderMenu,
+        showLeafForm,
+        showBranchForm
     }
 
 })();
