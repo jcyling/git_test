@@ -11,8 +11,6 @@ function loadStorage() {
 }
 function saveStorage(tree) {
     window.localStorage.setItem("appState", JSON.stringify(tree));
-    console.log("storage" + tree);
-
 }
 
 export {

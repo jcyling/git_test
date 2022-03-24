@@ -2,14 +2,18 @@ import { isDate, isPast } from 'date-fns/isDate';
 import { appe } from './index.js';
 import { saveStorage } from './storage.js';
 
-class Tree {
+export class Tree {
     constructor(name) {
         this.name = name;
         this.branches = []; 
     }
+
+    createBranch(name) {
+        let newBranch = new Branch(name.value);
+    }
 }
 
-class Branch {
+export class Branch {
     constructor(name, status) {
         this.name = name;
         this.leaves = [];
@@ -27,10 +31,9 @@ class Branch {
     get branchStatus() {
         return this.active;
     }
-
 }
 
-class Leaf {
+export class Leaf {
     constructor(name, stat, date) {
         this.name = name;
         this.stat = stat;
@@ -65,6 +68,10 @@ class Leaf {
             this.date = value;
         }
     }
+
+    alerting() {
+        alert("Hi")
+    }
 }
 
 // Module: Default project
@@ -80,7 +87,8 @@ const createDefaultProject = (function() {
 
         defaultTree.branches.push(dailies, weeklies);
         dailies.leaves.push(getMilk, getBread, makePlaylist);
-        
+        weeklies.leaves.push(getMilk, getBread, makePlaylist);
+
         return defaultTree;
     }
 
@@ -89,29 +97,64 @@ const createDefaultProject = (function() {
     }
 })();
 
-const addToProject = (function() {
-    function createBranch(name) {
-        let newBranch = new Branch(name.value);
-    }
-
+const editTree = (function() {
     function createLeaf(name, date) {
+        if (!name) {
+            return;
+        }
         let newLeaf = new Leaf(name, false);
         if (date) {
             newLeaf.date = date;
         }
-        let currentBranch = appe.branches.find(branch => branch.active == true);
-        currentBranch.leaves.push(newLeaf);
-        console.log(appe);
-        saveStorage(appe);
+        let activeBranch = appe.branches.find(branch => branch.active == true);
+        activeBranch.leaves.push(newLeaf);
     }
+    
+    function deleteLeaf(name) {
+        let activeLeaves = appe.branches.find(branch => branch.active == true).leaves;
+        activeLeaves.splice(activeLeaves.findIndex(function(item) {
+            item.name == name;
+        }), 1);
+    }
+
+    function editLeaf(oldName, newName, newDate) {
+        if (!newName) {
+            return;
+        }
+        else {
+            let activeLeaves = appe.branches.find(branch => branch.active == true).leaves;
+            let activeLeafIndex = activeLeaves.findIndex(item => item.name == oldName);
+            activeLeaves[activeLeafIndex].name = newName;
+            if (newDate) {
+                activeLeaves[activeLeafIndex].date = newDate;
+            }
+            else {
+                activeLeaves[activeLeafIndex].date = "";
+            }
+        }
+    }
+
+    function createBranch(name) {
+        let newBranch = new Branch(name, false);
+        appe.branches.push(newBranch);
+    }
+
+    function deleteBranch(name) {
+        appe.branches.splice(appe.branches.findIndex(function(item) {
+            item.name == name;
+        }, 1));
+    }
+    
     return {
+        createLeaf,
+        deleteLeaf,
         createBranch,
-        createLeaf
+        deleteBranch,
+        editLeaf
     }
 })();
 
 export {
-
     createDefaultProject,
-    addToProject
+    editTree
 }

@@ -1,5 +1,4 @@
-import { appe } from "./index.js"
-import { createElemWithClass } from "./helpers.js"
+import { createElemWithClass, createCircle } from "./helpers.js"
 
 // get stuff from storage
 const renderState = (function() {
@@ -24,14 +23,24 @@ const renderState = (function() {
 
         //Iterate through branch properties
         for (const [key, value] of Object.entries(item)) {
+            // For each object property (excluding arrays)
             if (Array.isArray(value) != true) {
-                const element = document.createElement("h3");
-                element.textContent = value;
+                const element = document.createElement("span");
+                if (key == "name") {
+                    element.textContent = value;
+                }
+                else {
+                    renderBranchStatus(branch, key, value);
+                }
                 element.classList.add(`branch-${key}`);
                 branch.appendChild(element);
             }
         }
 
+        // Delete button
+        const branchDel = createElemWithClass("button", "branch-delete", "X");
+        branch.appendChild(branchDel);
+        
         // Iterate through leaves
         item.leaves.forEach(function(item, index) {
             dashboard.insertBefore(renderLeaves(item, index), leafForm);
@@ -49,21 +58,38 @@ const renderState = (function() {
             leaf.appendChild(createElemWithClass("span", `leaf-${key}`, value));            
         }
 
+        leaf.appendChild(createElemWithClass("button", 'leaf-edit', "Edit"));
         return leaf;
     }
 
-    function showLeafForm() {
-        leafForm.classList.toggle("hidden");
+    function show(element) {
+        if (element.classList.contains("hidden")) {
+            element.classList.remove("hidden");
+        }
+        else {
+            element.classList.add("hidden");
+        }
+        
     }
 
-    function showBranchForm() {
-        branchForm.classList.toggle("hidden");
-
+    function renderBranchStatus(branch, key, value) {
+        branch.appendChild(createCircle(value, "branch-status"));
     }
+
+    function editLeafForm(leaf) {
+        const editForm = createElemWithClass("div", "edit-leaf-form")
+        const editLeafName = createElemWithClass("input", "edit-leaf-name", "", "placeholder", "Name")
+        const editLeafDate = createElemWithClass("input", "edit-leaf-date", "", "type", "date")
+        const editFormSubmit = createElemWithClass("button", "edit-leaf-submit", "Edit")
+        const editFormX = createElemWithClass("button", "edit-form-exit", "X")
+        editForm.append(editLeafName, editLeafDate, editFormSubmit, editFormX);
+        leaf.after(editForm);
+    }
+
     return {
         renderTree,
-        showLeafForm,
-        showBranchForm
+        show,
+        editLeafForm
     }
 
 })();
