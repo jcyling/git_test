@@ -29,8 +29,7 @@ function createCircle(status, classes) {
     svg.appendChild(circle);
     return svg;
 }
-
 export {
     createElemWithClass,
-    createCircle
+    createCircle,
 }

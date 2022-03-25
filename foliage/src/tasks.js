@@ -17,7 +17,7 @@ export class Branch {
     constructor(name, status) {
         this.name = name;
         this.leaves = [];
-        this.active = status;
+        this.status = status;
     }
 
     get branchName() {
@@ -29,7 +29,7 @@ export class Branch {
     }
 
     get branchStatus() {
-        return this.active;
+        return this.status;
     }
 }
 
@@ -68,10 +68,6 @@ export class Leaf {
             this.date = value;
         }
     }
-
-    alerting() {
-        alert("Hi")
-    }
 }
 
 // Module: Default project
@@ -106,15 +102,14 @@ const editTree = (function() {
         if (date) {
             newLeaf.date = date;
         }
-        let activeBranch = appe.branches.find(branch => branch.active == true);
+        let activeBranch = appe.branches.find(branch => branch.status == true);
         activeBranch.leaves.push(newLeaf);
     }
     
     function deleteLeaf(name) {
-        let activeLeaves = appe.branches.find(branch => branch.active == true).leaves;
-        activeLeaves.splice(activeLeaves.findIndex(function(item) {
-            item.name == name;
-        }), 1);
+        let activeLeaves = appe.branches.find(branch => branch.status == true).leaves;
+        let leafIndex = activeLeaves.findIndex(item => item.name == name);
+        activeLeaves.splice(leafIndex, 1);
     }
 
     function editLeaf(oldName, newName, newDate) {
@@ -122,7 +117,7 @@ const editTree = (function() {
             return;
         }
         else {
-            let activeLeaves = appe.branches.find(branch => branch.active == true).leaves;
+            let activeLeaves = appe.branches.find(branch => branch.status == true).leaves;
             let activeLeafIndex = activeLeaves.findIndex(item => item.name == oldName);
             activeLeaves[activeLeafIndex].name = newName;
             if (newDate) {
@@ -135,14 +130,28 @@ const editTree = (function() {
     }
 
     function createBranch(name) {
-        let newBranch = new Branch(name, false);
-        appe.branches.push(newBranch);
+        if (appe.branches.find(item => item.name == name)) {
+            console.log("Error");
+            return;
+        }
+        else {
+            let newBranch = new Branch(name, false);
+            appe.branches.push(newBranch);
+        }
     }
 
     function deleteBranch(name) {
-        appe.branches.splice(appe.branches.findIndex(function(item) {
-            item.name == name;
-        }, 1));
+        let branchIndex = appe.branches.findIndex(item => item.name == name);
+        if (branchIndex >= 0) {
+            appe.branches.splice(branchIndex, 1);
+        }
+    }
+
+    function setActiveBranch(name) {
+        appe.branches.forEach(item => item.status = false);
+        let currentBranchIndex = appe.branches.findIndex(item => item.name == name);
+        appe.branches[currentBranchIndex].status = true;
+
     }
     
     return {
@@ -150,7 +159,8 @@ const editTree = (function() {
         deleteLeaf,
         createBranch,
         deleteBranch,
-        editLeaf
+        editLeaf,
+        setActiveBranch
     }
 })();
 

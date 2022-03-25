@@ -12,40 +12,56 @@ const renderState = (function() {
         document.querySelectorAll(".branch").forEach(n => n.remove());
         document.querySelectorAll(".leaf").forEach(n => n.remove());
 
-        // Iterate through branches
+        let activeBranch = tree.branches.find(branch => branch.status == true);
+        if (activeBranch) {
+            renderBranchItems(activeBranch);
+        }
+        else {
+            tree.branches[0].status = true;
+            console.log(tree.branches[0]);
+            renderBranchItems(tree.branches[0]);
+        }
+
+        // Render branch in navigation
         tree.branches.forEach(function(item, index) {
-            branchNav.insertBefore(renderBranch(item, index), branchForm);
+            branchNav.insertBefore(renderBranchNav(item, index), branchForm);
         });
     }
 
-    function renderBranch(item, index) {
+    function renderBranchItems(item) {
+        // Render branch tasks in dashboard
+        item.leaves.forEach(function(item, index) {
+            dashboard.insertBefore(renderLeaves(item, index), leafForm);
+        });    
+    }
+
+    function renderBranchNav(item) {
         const branch = createElemWithClass("div", "branch");
 
-        //Iterate through branch properties
+        // Render branch UI in navigation pane
         for (const [key, value] of Object.entries(item)) {
             // For each object property (excluding arrays)
             if (Array.isArray(value) != true) {
-                const element = document.createElement("span");
                 if (key == "name") {
+                    const element = document.createElement("span");
+                    element.classList.add(`branch-${key}`);
                     element.textContent = value;
+                    branch.appendChild(element);
                 }
-                else {
+                if (key == "status") {
                     renderBranchStatus(branch, key, value);
+
+                    if (value == true) {
+                        branch.classList.add("active");
+                    }
+                    else {
+                        branch.classList.add("inactive");
+                    }
                 }
-                element.classList.add(`branch-${key}`);
-                branch.appendChild(element);
             }
         }
-
-        // Delete button
         const branchDel = createElemWithClass("button", "branch-delete", "X");
         branch.appendChild(branchDel);
-        
-        // Iterate through leaves
-        item.leaves.forEach(function(item, index) {
-            dashboard.insertBefore(renderLeaves(item, index), leafForm);
-        });
-
         return branch;
     }
 
@@ -62,6 +78,10 @@ const renderState = (function() {
         return leaf;
     }
 
+    function renderBranchStatus(branch, key, value) {
+        branch.appendChild(createCircle(value, "branch-status"));
+    }
+
     function show(element) {
         if (element.classList.contains("hidden")) {
             element.classList.remove("hidden");
@@ -70,10 +90,6 @@ const renderState = (function() {
             element.classList.add("hidden");
         }
         
-    }
-
-    function renderBranchStatus(branch, key, value) {
-        branch.appendChild(createCircle(value, "branch-status"));
     }
 
     function editLeafForm(leaf) {
@@ -95,5 +111,5 @@ const renderState = (function() {
 })();
 
 export {
-    renderState,
+    renderState
 }
