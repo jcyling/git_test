@@ -3,10 +3,11 @@ const gallery = document.querySelector(".gallery");
 const addBtn = document.querySelector(".add");
 const submit = document.querySelector(".submit");
 const closeBtn = document.querySelector(".closeBtn");
+const filmForm = document.getElementById("filmForm");
 
 addBtn.addEventListener("click", displayForm);
-submit.addEventListener("click", getInput);
 closeBtn.addEventListener("click", closeForm);
+submit.addEventListener("click", getInput);
 
 gallery.onclick = function(event) {
     let target = event.target.closest('button');
@@ -48,10 +49,6 @@ function getInput() {
     let d = formData.get("director"); 
     let g = formData.get("genre"); 
     let w = watchStatusInput(formData.get("watched")); 
-    
-    for (var value of formData.values()) {
-        console.log(value);
-    }
 
     if (!t || !d || !g) {
         return window.alert("Check again!");
