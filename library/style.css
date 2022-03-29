@@ -120,11 +120,17 @@ fieldset {
 
 input[type=text]{
     background-color: rgba(61, 61, 61, 0.8);
-    border: 0;
+    border: 1px solid white;
     border-radius: 20px;
     padding: 0.5em;
     margin-bottom: 1em;
     width: 90%;
+    color:rgba(233, 233, 233, 0.8);
+
+}
+
+input:invalid {
+    border: 1px solid red;
 }
 
 .genreSelect {
