@@ -1,4 +1,4 @@
-import { capitalize, reverseString, calculate } from "./index.js";
+import { capitalize, reverseString, calculate, caesar, analyzeArray } from "./index.js";
 
 test('Capitalize letter', () => {
     expect(capitalize("a")).toMatch(/A/);
@@ -34,4 +34,20 @@ test('Divide numbers', () => {
 
 test('Less than 2 arguments', () => {
     expect(() => { calculate.div(5) }).toThrowError();
+});
+
+test('Caesar word', () => {
+    expect(caesar("incandescent", 3)).toMatch(/lqfdqghvfhqw/);
+});
+
+test('Caesar word with wrapping', () => {
+    expect(caesar("azazadfwe", 10)).toMatch(/kjkjknpgo/);
+});
+
+test('Caesar word with punctuation', () => {
+    expect(caesar("there's a river.!", 10)).toMatch(/drobo'c k bsfob.!/);
+});
+
+test('Analyse array length', () => {
+    expect(analyzeArray([1, 9, 4, 5])).toEqual({"average": 4.75 ,"min": 1, "max": 9, "length": 4});
 });
